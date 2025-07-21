@@ -27,6 +27,10 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public ResponseEntity<String> save(Course course) {
         try {
+            Course c = courseRepository.findById(course.getId()).orElse(null);
+            if(c != null) {
+                return ResponseEntity.badRequest().body("Course already exists !!!");
+            }
             courseRepository.save(course);
             return ResponseEntity.ok("Course added successfully");
         } catch (RuntimeException e) {

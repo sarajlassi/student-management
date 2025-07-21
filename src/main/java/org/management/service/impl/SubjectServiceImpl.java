@@ -30,6 +30,10 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public ResponseEntity<String> save(Subject subject) {
+        Subject subj = subjectRepository.findById(subject.getId()).orElse(null);
+        if(subj != null) {
+            return ResponseEntity.badRequest().body("Subject already exists !!!");
+        }
         subjectRepository.save(subject);
         return ResponseEntity.ok("Subject saved successfully");
     }

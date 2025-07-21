@@ -18,6 +18,10 @@ public class AbsenceServiceImpl implements AbsenceService {
 
     @Override
     public ResponseEntity<String> save(Absence absence) {
+        Absence abs = absenceRepository.findById(absence.getId()).orElse(null);
+        if(abs != null) {
+            return ResponseEntity.badRequest().body("Absence already exists !!!");
+        }
         absenceRepository.save(absence);
         return ResponseEntity.ok("Absence created successfully");
     }
