@@ -2,7 +2,11 @@ package org.management.service.impl;
 
 import ch.qos.logback.classic.pattern.Abbreviator;
 import org.management.entity.Absence;
+import org.management.entity.Course;
+import org.management.entity.Student;
 import org.management.repository.AbsenceRepository;
+import org.management.repository.CourseRepository;
+import org.management.repository.StudentRepository;
 import org.management.service.AbsenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +19,12 @@ import java.util.Optional;
 public class AbsenceServiceImpl implements AbsenceService {
     @Autowired
     private AbsenceRepository absenceRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+     @Autowired
+     private CourseRepository courseRepository;
 
     @Override
     public ResponseEntity<String> save(Absence absence) {
@@ -52,7 +62,15 @@ public class AbsenceServiceImpl implements AbsenceService {
     }
 
     @Override
-    public Boolean isStudentEliminated(Long studentId, Long courseId) {
+    public Boolean isStudentEliminated(Long studentId, Long courseId)  {
+        Student student = studentRepository.findById(studentId).orElse(null);
+        Course course = courseRepository.findById(courseId).orElse(null);
+        if(student == null) {
+            throw new RuntimeException("Student with the given ID doesn't exist !!!");
+        }
+        if (course == null) {
+            throw new RuntimeException("Course with the given ID doesn't exist !!!");
+        }
         long unjustifiedCount = absenceRepository.countUnjustifiedAbsences(studentId, courseId);
         return unjustifiedCount > 3;
     }

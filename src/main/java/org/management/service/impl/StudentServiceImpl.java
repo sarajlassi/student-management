@@ -65,8 +65,8 @@ public class StudentServiceImpl implements StudentService {
 
         }
         if (grade.getValue() > 20 || grade.getValue() < 0) {
-            return ResponseEntity.ok("Grade value must be between 0 and 20");
-        }
+            return ResponseEntity.badRequest().body("Grade value must be between 0 and 20");
+         }
         if (optionalStudent.isPresent()) {
             Student student = optionalStudent.get();
             student.getGrades().add(grade);

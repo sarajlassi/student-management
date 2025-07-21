@@ -14,7 +14,6 @@ public class JwtUtil {
     private final String secret = "your-super-secret-key-must-be-at-least-32-chars"; // at least 32 characters!
     private final long expiration = 86400000; // 24h in milliseconds
 
-    // ✅ Create signing key correctly
     private Key getSigningKey() {
         byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
@@ -44,7 +43,7 @@ public class JwtUtil {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey()) // ✅ must be a Key object
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

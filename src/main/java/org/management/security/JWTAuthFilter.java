@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 @Component
 public class JWTAuthFilter extends OncePerRequestFilter {
 
@@ -36,10 +37,12 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
             try {
+                System.out.println("authHeader: " + authHeader);
                 username = jwtUtil.extractUsername(jwt);
             } catch (Exception e) {
-                // Optional: log the error and continue
                 System.out.println("Invalid JWT: " + e.getMessage());
+                throw new RuntimeException("Failed to extract username from JWT");
+
             }
         }
 
