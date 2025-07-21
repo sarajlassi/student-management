@@ -6,6 +6,7 @@ import org.management.entity.Subject;
 import org.management.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,12 +20,13 @@ public class SubjectController {
     @Autowired
     private SubjectService subjectService;
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<String> createSubject(@RequestBody Subject subject) {
         return subjectService.save(subject);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteSubject(@PathVariable Long id) {
 
@@ -43,6 +45,7 @@ public class SubjectController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping ("/update/{id}")
     public ResponseEntity<String> update(@PathVariable Long id, @RequestBody Subject e) {
         return subjectService.findSubjectById(id)

@@ -17,11 +17,11 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void registerUser(String username, String password) {
+    public void registerUser(String username, String password, String role) {
         UserApps userApps = new UserApps();
         userApps.setUsername(username);
         userApps.setPassword(passwordEncoder.encode(password));
-        userApps.setRole("USER"); // or "ADMIN" if needed
+        userApps.setRole(role);
         userRepository.save(userApps);
     }
 

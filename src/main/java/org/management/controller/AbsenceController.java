@@ -5,10 +5,10 @@ import org.management.entity.Absence;
 import org.management.service.AbsenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,10 +17,13 @@ public class AbsenceController {
     @Autowired
     private final AbsenceService absenceService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<String> saveAbsence(@RequestBody Absence absence) {
         return absenceService.save(absence);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{absenceId}")
     public ResponseEntity<String> deleteAbsence(@PathVariable Long id) {
         return absenceService.deleteAbsence(id);
@@ -44,7 +47,7 @@ public class AbsenceController {
         return ResponseEntity.ok(absence);
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/update/{absenceId}")
     public ResponseEntity<String> updateAbsence(@PathVariable Long absenceId, @RequestBody Absence updatedAbsence) {
         List<Absence> existingCourse = absenceService.findAbsenceById(absenceId);
@@ -55,6 +58,7 @@ public class AbsenceController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @GetMapping("/elimination")
     public ResponseEntity<String> checkElimination(
             @RequestParam Long studentId,
@@ -68,6 +72,8 @@ public class AbsenceController {
         }
     }
 
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/justify/{absenceId}")
     public ResponseEntity<String> justifyAbsence(@PathVariable Long absenceId) {
         return absenceService.justifyAbsence(absenceId);

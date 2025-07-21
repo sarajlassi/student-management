@@ -5,6 +5,7 @@ import org.management.entity.Course;
 import org.management.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,11 +19,14 @@ import java.util.Optional;
 public class CourseController {
     @Autowired
     private final CourseService courseService;
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<String> saveCourse(@RequestBody Course course) {
         return courseService.save(course);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{courseId}")
     public ResponseEntity<String> deleteCourse(@PathVariable Long courseId) {
         return courseService.deleteCourse(courseId);
@@ -40,6 +44,7 @@ public class CourseController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/update/{courseId}")
     public ResponseEntity<String> updateCourse(@PathVariable Long courseId, @RequestBody Course updatedCourse) {
         Optional<Course> existingCourse = courseService.findCourseById(courseId);

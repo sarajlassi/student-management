@@ -34,12 +34,16 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public ResponseEntity<String> deleteStudent(Long studentId) {
-        Student student = studentRepository.findById(studentId).orElse(null);
-        if(student == null) {
-            return ResponseEntity.badRequest().body("Student not found");
+        try {
+            Student student = studentRepository.findById(studentId).orElse(null);
+            if (student == null) {
+                return ResponseEntity.badRequest().body("Student not found");
+            }
+            studentRepository.deleteById(studentId);
+            return ResponseEntity.ok("Student deleted successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        studentRepository.deleteById(studentId);
-        return ResponseEntity.ok("Student deleted successfully");
     }
 
     @Override
