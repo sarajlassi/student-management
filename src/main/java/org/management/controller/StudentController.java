@@ -1,5 +1,8 @@
 package org.management.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.management.entity.Grade;
 import org.management.entity.Student;
@@ -21,6 +24,12 @@ public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
 
+
+    @Operation(summary = "Get client by ID", description = "Returns a client by their code")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Client found"),
+            @ApiResponse(responseCode = "404", description = "Client not found")
+    })
     @GetMapping("/search")
     public List<Student> getAll() {
         return studentService.findAllStudents();

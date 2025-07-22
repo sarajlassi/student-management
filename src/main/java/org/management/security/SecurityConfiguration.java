@@ -29,8 +29,15 @@ public class SecurityConfiguration {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/auth/**"))
-                         .permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/auth/**")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/swagger-ui.html")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/swagger/**")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/swagger-ui/**")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/v3/api-docs/**")).permitAll()
+
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/health/**")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.OPTIONS, "/**")).permitAll()
+
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated()
                 )
